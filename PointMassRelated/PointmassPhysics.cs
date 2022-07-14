@@ -6,17 +6,15 @@ using System.Threading.Tasks;
 
 namespace BluuMaths.PointMassRelated
 {
-    internal static class PointmassPhysics
+    public static class PointmassPhysics
     {
-        public static void moveAllPointmassesOneStepMT(ref List<Pointmass> everything)
+        public static void moveAllPointmassesOneStepMT(ref List<Pointmass> everything, int timestep)
         {            //return p.StartingVelocity.initVelX + initialVelocity * timestep + (0.5f) * acceleration * Trigonometry.square(timestep);
-            int timestep = 1;
             for (int targetPointmass = 0; targetPointmass < everything.Count; targetPointmass++)
             {
-                //var thread1 = new Thread(nudgeOnePointDueOthers(targetPointmass, ref everything, timestep));
-                //send nudgeOnePointDueOthers(targetPointmass+1, ref everything, timestep) to thread 1
-                //send nudgeOnePointDueOthers(targetPointmass+2, ref everything, timestep) to thread 2
-                //send nudgeOnePointDueOthers(targetPointmass+3, ref everything, timestep) to thread 3
+                //send nudgeOnePointDueOthers(targetPointmass, ref everything, timestep) to thread 1
+                //send nudgeOnePointDueOthers(targetPointmass+1, ref everything, timestep) to thread 2
+                //send nudgeOnePointDueOthers(targetPointmass+2, ref everything, timestep) to thread 3
                 //etc...
 
                 nudgeOnePointDueOthers(targetPointmass, ref everything, timestep);
@@ -41,10 +39,30 @@ namespace BluuMaths.PointMassRelated
                     sumAccY += yAcc;
                 }
             }
+
+            // update the new location based on speed and acceleration
             (double locX, double locY) = p.Location;
-            locX += sumAccX * timestep;
-            locY += sumAccY * timestep;
+            locX +=  p.Velocity.velX * timestep + (0.5f) * sumAccX * Trigonometry.square(timestep);
+            locY +=  p.Velocity.velY * timestep + (0.5f) * sumAccY * Trigonometry.square(timestep);
+            //locX += sumAccX * timestep;
+            //locY += sumAccY * timestep;
             p.Location = (locX, locY);
+
+            // update the new speed based on speed and acceleration
+            (double velX, double velY) = p.Velocity;
+            velX = velX + sumAccX * timestep;
+            velY = velY + sumAccY * timestep;
+            p.Velocity = (velX, velY);
+
+            //Console.WriteLine(otherPointmasses.IndexOf(p) + "acc: " + sumAccX.ToString(".###################"));
+            var currP = otherPointmasses.IndexOf(p);
+            if (currP == 1 || true)
+            {
+                Console.WriteLine(otherPointmasses.IndexOf(p) + "locx: " + locX.ToString() + (otherPointmasses.IndexOf(p) + " --- locy: " + locY.ToString()));
+            }
+                
+
+            
         }
 
         public static double absAcceleration(Pointmass p, Pointmass p_other)
@@ -63,7 +81,7 @@ namespace BluuMaths.PointMassRelated
         {
             double dx = p.Location.posX - p_other.Location.posX;
             double dy = p.Location.posY - p_other.Location.posY;
-            return (dx, dy);
+            return (-dx, -dy);
         }
 
     }
