@@ -28,5 +28,12 @@ namespace BluuMaths.PointMassRelated
         public (double initVelX, double initVelY) StartingVelocity { get; set; }
         public (double velX, double velY) Velocity { get; set; }
 
+        public Pointmass(double mass, (double posX, double posY) location, (double initVelX, double initVelY) startingVelocity)
+        {
+            this.Mass = mass;
+            this.Location = location;
+            this.StartingVelocity = startingVelocity;
+            this.Velocity = startingVelocity;
+        }
     }
 }
