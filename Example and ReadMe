@@ -1,0 +1,33 @@
+//This project is made in .Net 6, and afaik you only need to install Scottplot.
+
+//here's the minimum you need for three gravitational bodies
+
+using BluuMaths.PointMassRelated;
+
+//makes three pointmasses and adds them to the world
+// the syntax is Pointmass(mass, (pos_X, pos_Y), (initVelocity_X, initVelocity_Y))
+List<Pointmass> world = new List<Pointmass>();
+world.Add(new Pointmass(10e7, (0, 0), (0, 0)));
+world.Add(new Pointmass(1, (1, 0), (0, 0.081695042689259922)));
+world.Add(new Pointmass(10e2, (-2, 0), (0, 0.05776711867490017)));
+//The specific values there are calculated to form perfectly circular orbits
+
+//the value in the forloop is just the amount of timesteps the sim should do before quitting
+for (int i = 0; i < 2500; i++)
+{
+    PointmassPhysics.moveAllPointmassesOneStepMT(ref world, 0.001);
+}
+
+
+// here's for the plugin ScottPlot, which you need to install if you want to run the code below and actually see the orbits
+if(false)
+{
+    var plt = new ScottPlot.Plot(800, 800);
+    for (int i = 0; i < world.Count; i++)
+    {
+        double[] xs = world[i].PositionHistoryX.ToArray(); ;
+        double[] ys = world[i].PositionHistoryY.ToArray(); ;
+        plt.AddScatter(xs, ys);
+    }
+    plt.SaveFig("quickstart.png");
+}
