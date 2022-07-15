@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace BluuMaths.PointMassRelated
 {
     public class Pointmass
@@ -27,6 +22,8 @@ namespace BluuMaths.PointMassRelated
         public (double posX, double posY) Location { get; set; }
         public (double initVelX, double initVelY) StartingVelocity { get; set; }
         public (double velX, double velY) Velocity { get; set; }
+        public List<double> PositionHistoryX { get; set; } = new List<double>();
+        public List<double> PositionHistoryY { get; set; } = new List<double>();
 
         public Pointmass(double mass, (double posX, double posY) location, (double initVelX, double initVelY) startingVelocity)
         {
@@ -34,6 +31,8 @@ namespace BluuMaths.PointMassRelated
             this.Location = location;
             this.StartingVelocity = startingVelocity;
             this.Velocity = startingVelocity;
+            this.PositionHistoryX.Add(location.posX);
+            this.PositionHistoryY.Add(location.posY);
         }
     }
 }
