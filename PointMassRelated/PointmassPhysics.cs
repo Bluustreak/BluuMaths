@@ -7,10 +7,12 @@
             for (int targetPointmass = 0; targetPointmass < everything.Count; targetPointmass++)
             {
                 //the idea here was to make it multithreaded, but that turned out to be really weird in C#
+                //furthermore, making this threaddable may actually be WORSE in performance  due to overhead
                 //send nudgeOnePointDueOthers(targetPointmass, ref everything, timestep) to thread 1
                 //send nudgeOnePointDueOthers(targetPointmass+1, ref everything, timestep) to thread 2
                 //send nudgeOnePointDueOthers(targetPointmass+2, ref everything, timestep) to thread 3
                 //etc...
+
 
                 nudgeOnePointDueOthers(targetPointmass, ref everything, timestep);
             }
@@ -51,16 +53,6 @@
             velX = velX + sumAccX * timestep;
             velY = velY + sumAccY * timestep;
             p.Velocity = (velX, velY);
-
-            //Console.WriteLine(otherPointmasses.IndexOf(p) + "acc: " + sumAccX.ToString(".###################"));
-            //var currP = otherPointmasses.IndexOf(p);
-            //if (currP == 1)
-            //{
-            //    Console.WriteLine(otherPointmasses.IndexOf(p) + "locx: " + locX.ToString() + (otherPointmasses.IndexOf(p) + " --- locy: " + locY.ToString()));
-            //}
-
-
-
         }
 
         public static double absAcceleration(Pointmass p, Pointmass p_other)

@@ -7,7 +7,7 @@ namespace BluuMaths
 
         public static double dispDueAcc(double initialPos, double initialVelocity, double acceleration, int timestep)
         {
-            // x_0 + v_0*t + (0.5f)*a*square(t)
+            // x_0 + v_0*t + (0.5f)*a*square(t) is the formula
             return initialPos + initialVelocity * timestep + (0.5f) * acceleration * Trigonometry.square(timestep);
         }
 
